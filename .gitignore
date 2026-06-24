@@ -1,0 +1,21 @@
+# internal design docs — not for publication
+AGENT.md
+PROTOCOL.md
+SPEC.md
+
+# build artifacts
+bastion-agent
+bastion-agent.exe
+*.exe
+/dist/
+
+# test / profiling
+*.test
+*.prof
+*.out
+*.bench
+
+# editor
+.vscode/
+.idea/
+*.swp
