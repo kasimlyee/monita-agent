@@ -83,22 +83,35 @@ func (p *PendingEntry) Ack() error {
 	return os.Remove(filepath.Join(p.buf.dir, p.name))
 }
 
-// Next returns the oldest pending entry, or nil if the queue is empty.
+// Next returns the oldest pending entry regardless of kind, or nil if empty.
 func (b *Buffer) Next() (*PendingEntry, error) {
+	return b.nextWhere(func(Kind) bool { return true })
+}
+
+// NextKind returns the oldest pending entry of the given kind, or nil if none.
+func (b *Buffer) NextKind(kind Kind) (*PendingEntry, error) {
+	return b.nextWhere(func(k Kind) bool { return k == kind })
+}
+
+func (b *Buffer) nextWhere(match func(Kind) bool) (*PendingEntry, error) {
 	b.mu.Lock()
 	defer b.mu.Unlock()
 
 	files, err := b.list()
-	if err != nil || len(files) == 0 {
+	if err != nil {
 		return nil, err
 	}
-
-	f := files[0]
-	data, err := os.ReadFile(filepath.Join(b.dir, f.name))
-	if err != nil {
-		return nil, fmt.Errorf("read buffer entry: %w", err)
+	for _, f := range files {
+		if !match(f.kind) {
+			continue
+		}
+		data, err := os.ReadFile(filepath.Join(b.dir, f.name))
+		if err != nil {
+			return nil, fmt.Errorf("read buffer entry: %w", err)
+		}
+		return &PendingEntry{buf: b, name: f.name, Kind: f.kind, Payload: data}, nil
 	}
-	return &PendingEntry{buf: b, name: f.name, Kind: f.kind, Payload: data}, nil
+	return nil, nil
 }
 
 // Len returns the number of pending entries.

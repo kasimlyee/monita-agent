@@ -3,6 +3,7 @@ module github.com/kasimlyee/monita-agent
 go 1.25.4
 
 require (
+	github.com/fsnotify/fsnotify v1.10.1
 	github.com/klauspost/compress v1.18.6
 	github.com/shirou/gopsutil/v4 v4.26.5
 	gopkg.in/yaml.v3 v3.0.1
