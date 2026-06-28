@@ -6,6 +6,14 @@ Designed for resource-constrained and cost-sensitive deployments — ARM Gravito
 
 ---
 
+## Collector
+
+The agent pushes to any HTTP service that speaks the wire protocol defined in [`PROTOCOL.md`](docs/PROTOCOL.md). That document is the full contract — endpoints, auth, request/response shapes, compression, fingerprinting, and token lifecycle.
+
+[**monita-collector**](https://github.com/SUDS-Tech/monita-collector) is a reference implementation you can self-host. If you want to build your own, `PROTOCOL.md` is all you need — the agent has no opinion on how the receiver is implemented.
+
+---
+
 ## Requirements
 
 - A running Monita Collector reachable over HTTPS
