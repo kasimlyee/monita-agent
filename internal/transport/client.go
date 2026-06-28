@@ -336,7 +336,9 @@ func (c *Client) RunPushLoop(ctx context.Context, buf *buffer.Buffer, metricsCh 
 			fmt.Fprintf(os.Stderr, "level=warn msg=\"metrics push failed, buffering\" err=%v\n", err)
 			store(batch)
 			authFails = 0
-			if next := bo.Fail(); next != bo.Current() {
+			prev := bo.Current()
+			next := bo.Fail()
+			if next != prev {
 				ticker.Reset(next)
 				fmt.Fprintf(os.Stderr, "level=info msg=\"backoff\" next_interval=%s\n", next)
 			}
@@ -427,8 +429,11 @@ func (c *Client) RunLogsLoop(ctx context.Context, buf *buffer.Buffer, logsCh <-c
 			fmt.Fprintf(os.Stderr, "level=warn msg=\"logs push failed, buffering\" err=%v\n", err)
 			store(batch)
 			authFails = 0
-			if next := bo.Fail(); next != bo.Current() {
+			prev := bo.Current()
+			next := bo.Fail()
+			if next != prev {
 				ticker.Reset(next)
+				fmt.Fprintf(os.Stderr, "level=info msg=\"backoff\" next_interval=%s\n", next)
 			}
 			return
 		}
