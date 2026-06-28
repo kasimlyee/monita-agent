@@ -1,6 +1,6 @@
 # monita-agent
 
-A lightweight, static Go binary that runs as a sidecar or systemd service on monitored servers. It collects system metrics, tails log sources, and pushes signed, compressed batches to a [Monita Collector](https://github.com/kasimlyee/monita-collector).
+A lightweight, static Go binary that runs as a sidecar or systemd service on monitored servers. It collects system metrics, tails log sources, and pushes signed, compressed batches to a Monita Collector.
 
 Designed for resource-constrained and cost-sensitive deployments — ARM Graviton, budget EC2, bare metal. Binary is under 10 MB stripped and idles well under 20 MB RSS.
 
